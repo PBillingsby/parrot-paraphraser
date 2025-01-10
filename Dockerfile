@@ -28,4 +28,4 @@ ENV HF_HUB_DISABLE_TELEMETRY=1
 ENV HF_MLFLOW_TRACKING_UI_HOST=none
 
 # Default command
-ENTRYPOINT ["python", "-u", "run_inference.py"]
+ENTRYPOINT ["python", "-u", "/workspace/run_inference.py"]
