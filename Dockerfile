@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
   wget \
   && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
+WORKDIR /workspace
 
 # Copy requirements and install dependencies
 COPY requirements.txt .
@@ -28,4 +28,4 @@ ENV HF_HUB_DISABLE_TELEMETRY=1
 ENV HF_MLFLOW_TRACKING_UI_HOST=none
 
 # Default command
-CMD ["python", "-u", "run_inference.py"]
+ENTRYPOINT ["python", "-u", "run_inference.py"]
