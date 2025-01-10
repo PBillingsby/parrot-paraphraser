@@ -1,6 +1,5 @@
 FROM python:3.9-slim
 
-# Install system dependencies
 RUN apt-get update && apt-get install -y \
   build-essential \
   wget \
@@ -8,24 +7,21 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /workspace
 
-# Copy requirements and install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip \
   && pip install --no-cache-dir -r requirements.txt
 
-# Copy the inference script
 COPY run_inference.py .
+COPY model /model
 
-# Ensure the outputs directory exists and is writable
-RUN mkdir -p /outputs && chmod 777 /outputs
-
-# Set Python to unbuffered mode to see output immediately
+# Environment variables for running offline and using the local model directory
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
+ENV HF_HOME=/model
+ENV TRANSFORMERS_CACHE=/model
+ENV TRANSFORMERS_OFFLINE=1
 
-# Disable HuggingFace telemetry
-ENV HF_HUB_DISABLE_TELEMETRY=1
-ENV HF_MLFLOW_TRACKING_UI_HOST=none
+RUN mkdir -p /outputs
+RUN chmod 777 /outputs
 
-# Default command
 ENTRYPOINT ["python", "-u", "/workspace/run_inference.py"]
