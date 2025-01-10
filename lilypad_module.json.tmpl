@@ -1,0 +1,41 @@
+{
+    "machine": {
+        "gpu": 0,
+        "cpu": 1000,
+        "ram": 4000
+    },
+    "job": {
+        "APIVersion": "V1beta1",
+        "Spec": {
+            "Deal": {
+                "Concurrency": 1
+            },
+            "Docker": {
+                "Entrypoint": ["python", "/workspace/run_inference.py"],
+                "WorkingDirectory": "/workspace",
+                "EnvironmentVariables": [
+                    {{ if .input_text }}"INPUT_TEXT={{ js .input_text }}"{{ else }}"INPUT_TEXT=Default text for analysis"{{ end }}
+                ],
+                "Image": "pbillingsby/paraphrase-inference:v1-beta"
+            },
+            "Engine": "Docker",
+            "Network": {
+                "Type": "None"
+            },
+            "Outputs": [
+                {
+                    "Name": "outputs",
+                    "Path": "/outputs"
+                }
+            ],
+            "PublisherSpec": {
+                "Type": "ipfs"
+            },
+            "Resources": {
+                "CPU": "1",
+                "Memory": "4000"
+            },
+            "Timeout": 600
+        }
+    }
+}
