@@ -5,7 +5,7 @@
         "ram": 6000
     },
     "job": {
-        "APIVersion": "V1beta1",
+        "APIVersion": "v1",
         "Spec": {
             "Deal": {
                 "Concurrency": 1
@@ -14,9 +14,9 @@
                 "Entrypoint": ["python", "/workspace/run_inference.py"],
                 "WorkingDirectory": "/workspace",
                 "EnvironmentVariables": [
-                    {{ if .input_text }}"INPUT_TEXT={{ js .input_text }}"{{ else }}"INPUT_TEXT=Default text for analysis"{{ end }}
+                    {{ if .input_text }}"input_text={{ js .input_text }}"{{ else }}"input_text=Default text for analysis"{{ end }}
                 ],
-                "Image": "pbillingsby/paraphrase-inference:v1-beta-5"
+                "Image": "pbillingsby/paraphraser:v1"
             },
             "Engine": "Docker",
             "Network": {
@@ -28,11 +28,9 @@
                     "Path": "/outputs"
                 }
             ],
-            "PublisherSpec": {
-                "Type": "ipfs"
-            },
             "Resources": {
-                "GPU": "1"
+                "CPU": "1",
+                "Memory": "4000"
             },
             "Timeout": 600
         }
